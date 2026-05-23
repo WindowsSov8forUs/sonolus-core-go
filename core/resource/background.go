@@ -1,7 +1,8 @@
-package content
+package resource
 
 import (
 	"encoding/json"
+
 	"github.com/WindowsSov8forUs/sonolus-core-go/core"
 
 	"github.com/WindowsSov8forUs/sonolus-core-go/errors"

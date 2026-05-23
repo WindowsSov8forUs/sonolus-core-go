@@ -1,4 +1,4 @@
-package content
+package resource
 
 type RuntimeFunction string
 

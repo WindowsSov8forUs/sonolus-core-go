@@ -1,4 +1,4 @@
-package content
+package resource
 
 import (
 	"github.com/WindowsSov8forUs/sonolus-core-go/core"
