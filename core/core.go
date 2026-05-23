@@ -1,7 +1,5 @@
 package core
 
-import "github.com/WindowsSov8forUs/sonolus-core-go/internal/nilable"
-
 type GameplayResult struct {
 	Grade         Grade   `json:"grade"`
 	ArcadeScore   float64 `json:"arcadeScore"`
@@ -20,8 +18,8 @@ type Sil struct {
 }
 
 type Srl struct {
-	Hash *nilable.Nilable[string] `json:"hash,omitempty"`
-	URL  *nilable.Nilable[string] `json:"url,omitempty"`
+	Hash *Nilable[string] `json:"hash,omitempty"`
+	URL  *Nilable[string] `json:"url,omitempty"`
 }
 
 type Tag struct {
