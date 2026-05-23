@@ -15,3 +15,7 @@ type RoomItem struct {
 	BGM        *core.Srl  `json:"bgm,omitempty"`
 	Preview    *core.Srl  `json:"preview,omitempty"`
 }
+
+func DecodeRoomItem(data []byte) (RoomItem, error) {
+	return decodeItemAs[RoomItem](data)
+}

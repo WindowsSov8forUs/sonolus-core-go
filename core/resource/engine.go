@@ -626,3 +626,212 @@ type EngineItem struct {
 	ROM           *core.Srl      `json:"rom,omitempty"`
 	Configuration core.Srl       `json:"configuration"`
 }
+
+func DecodeEngineConfigurationOption(data []byte) (EngineConfigurationOption, error) {
+	var header struct {
+		Type EngineConfigurationOptionType `json:"type"`
+	}
+	if err := json.Unmarshal(data, &header); err != nil {
+		return nil, err
+	}
+
+	switch header.Type {
+	case EngineConfigurationOptionTypeSlider:
+		return decodeEngineConfigurationOptionAs[EngineConfigurationSliderOption](data)
+	case EngineConfigurationOptionTypeToggle:
+		return decodeEngineConfigurationOptionAs[EngineConfigurationToggleOption](data)
+	case EngineConfigurationOptionTypeSelect:
+		return decodeEngineConfigurationOptionAs[EngineConfigurationSelectOption](data)
+	default:
+		return nil, errors.UnknownUnionTypeError{
+			Union: "EngineConfigurationOption",
+			Type:  string(header.Type),
+		}
+	}
+}
+
+func decodeEngineConfigurationOptionAs[T EngineConfigurationOption](data []byte) (EngineConfigurationOption, error) {
+	var option T
+	if err := json.Unmarshal(data, &option); err != nil {
+		return nil, err
+	}
+	return option, nil
+}
+
+func DecodeEngineDataNode(data []byte) (EngineDataNode, error) {
+	var shape map[string]json.RawMessage
+	if err := json.Unmarshal(data, &shape); err != nil {
+		return nil, err
+	}
+
+	if _, ok := shape["value"]; ok {
+		var node EngineDataValueNode
+		if err := json.Unmarshal(data, &node); err != nil {
+			return nil, err
+		}
+		return node, nil
+	}
+	if _, ok := shape["func"]; ok {
+		var node EngineDataFunctionNode
+		if err := json.Unmarshal(data, &node); err != nil {
+			return nil, err
+		}
+		return node, nil
+	}
+	return nil, errors.UnknownUnionShapeError{Union: "EngineDataNode"}
+}
+
+func decodeEngineDataNodes(rawNodes []json.RawMessage) ([]EngineDataNode, error) {
+	nodes := make([]EngineDataNode, len(rawNodes))
+	for i, rawNode := range rawNodes {
+		node, err := DecodeEngineDataNode(rawNode)
+		if err != nil {
+			return nil, err
+		}
+		nodes[i] = node
+	}
+	return nodes, nil
+}
+
+func (configuration *EngineConfiguration) UnmarshalJSON(data []byte) error {
+	type engineConfiguration EngineConfiguration
+	var raw struct {
+		Options []json.RawMessage `json:"options"`
+		*engineConfiguration
+	}
+	raw.engineConfiguration = (*engineConfiguration)(configuration)
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	options := make([]EngineConfigurationOption, len(raw.Options))
+	for i, rawOption := range raw.Options {
+		option, err := DecodeEngineConfigurationOption(rawOption)
+		if err != nil {
+			return err
+		}
+		options[i] = option
+	}
+	configuration.Options = options
+	return nil
+}
+
+func (data *EnginePlayData) UnmarshalJSON(rawData []byte) error {
+	type enginePlayData EnginePlayData
+	var raw struct {
+		Nodes []json.RawMessage `json:"nodes"`
+		*enginePlayData
+	}
+	raw.enginePlayData = (*enginePlayData)(data)
+	if err := json.Unmarshal(rawData, &raw); err != nil {
+		return err
+	}
+
+	nodes, err := decodeEngineDataNodes(raw.Nodes)
+	if err != nil {
+		return err
+	}
+	data.Nodes = nodes
+	return nil
+}
+
+func (data *EngineWatchData) UnmarshalJSON(rawData []byte) error {
+	type engineWatchData EngineWatchData
+	var raw struct {
+		Nodes []json.RawMessage `json:"nodes"`
+		*engineWatchData
+	}
+	raw.engineWatchData = (*engineWatchData)(data)
+	if err := json.Unmarshal(rawData, &raw); err != nil {
+		return err
+	}
+
+	nodes, err := decodeEngineDataNodes(raw.Nodes)
+	if err != nil {
+		return err
+	}
+	data.Nodes = nodes
+	return nil
+}
+
+func (data *EnginePreviewData) UnmarshalJSON(rawData []byte) error {
+	type enginePreviewData EnginePreviewData
+	var raw struct {
+		Nodes []json.RawMessage `json:"nodes"`
+		*enginePreviewData
+	}
+	raw.enginePreviewData = (*enginePreviewData)(data)
+	if err := json.Unmarshal(rawData, &raw); err != nil {
+		return err
+	}
+
+	nodes, err := decodeEngineDataNodes(raw.Nodes)
+	if err != nil {
+		return err
+	}
+	data.Nodes = nodes
+	return nil
+}
+
+func (data *EngineTutorialData) UnmarshalJSON(rawData []byte) error {
+	type engineTutorialData EngineTutorialData
+	var raw struct {
+		Nodes []json.RawMessage `json:"nodes"`
+		*engineTutorialData
+	}
+	raw.engineTutorialData = (*engineTutorialData)(data)
+	if err := json.Unmarshal(rawData, &raw); err != nil {
+		return err
+	}
+
+	nodes, err := decodeEngineDataNodes(raw.Nodes)
+	if err != nil {
+		return err
+	}
+	data.Nodes = nodes
+	return nil
+}
+
+func DecodeEngineItem(data []byte) (EngineItem, error) {
+	return decodeItemAs[EngineItem](data)
+}
+
+func DecodeItem(itemType core.ItemType, data []byte) (any, error) {
+	switch itemType {
+	case core.ItemTypePost:
+		return DecodePostItem(data)
+	case core.ItemTypePlaylist:
+		return DecodePlaylistItem(data)
+	case core.ItemTypeLevel:
+		return DecodeLevelItem(data)
+	case core.ItemTypeSkin:
+		return DecodeSkinItem(data)
+	case core.ItemTypeBackground:
+		return DecodeBackgroundItem(data)
+	case core.ItemTypeEffect:
+		return DecodeEffectItem(data)
+	case core.ItemTypeParticle:
+		return DecodeParticleItem(data)
+	case core.ItemTypeEngine:
+		return DecodeEngineItem(data)
+	case core.ItemTypeReplay:
+		return DecodeReplayItem(data)
+	case core.ItemTypeRoom:
+		return DecodeRoomItem(data)
+	case core.ItemTypeUser:
+		return DecodeUserItem(data)
+	default:
+		return nil, errors.UnknownUnionTypeError{
+			Union: "ResourceItem",
+			Type:  string(itemType),
+		}
+	}
+}
+
+func decodeItemAs[T any](data []byte) (T, error) {
+	var item T
+	if err := json.Unmarshal(data, &item); err != nil {
+		return item, err
+	}
+	return item, nil
+}

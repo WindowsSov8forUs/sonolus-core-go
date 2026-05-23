@@ -9,3 +9,7 @@ type UserItem struct {
 	Handle string     `json:"handle,omitempty"`
 	Tags   []core.Tag `json:"tags,omitempty"`
 }
+
+func DecodeUserItem(data []byte) (UserItem, error) {
+	return decodeItemAs[UserItem](data)
+}

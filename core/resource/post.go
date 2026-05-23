@@ -17,3 +17,7 @@ type PostItem struct {
 	Tags       []core.Tag `json:"tags"`
 	Thumbnail  *core.Srl  `json:"thumbnail,omitempty"`
 }
+
+func DecodePostItem(data []byte) (PostItem, error) {
+	return decodeItemAs[PostItem](data)
+}

@@ -60,6 +60,10 @@ type BackgroundItem struct {
 	Configuration core.Srl   `json:"configuration"`
 }
 
+func DecodeBackgroundItem(data []byte) (BackgroundItem, error) {
+	return decodeItemAs[BackgroundItem](data)
+}
+
 type BackgroundConfiguration struct {
 	Scope string  `json:"scope,omitempty"`
 	Blur  float64 `json:"blur"`

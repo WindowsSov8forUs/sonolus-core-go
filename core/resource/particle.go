@@ -73,6 +73,10 @@ type ParticleItem struct {
 	Texture    core.Srl   `json:"texture"`
 }
 
+func DecodeParticleItem(data []byte) (ParticleItem, error) {
+	return decodeItemAs[ParticleItem](data)
+}
+
 type ParticleData struct {
 	Width         float64              `json:"width"`
 	Height        float64              `json:"height"`

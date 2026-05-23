@@ -20,6 +20,10 @@ type ReplayItem struct {
 	Configuration core.Srl   `json:"configuration"`
 }
 
+func DecodeReplayItem(data []byte) (ReplayItem, error) {
+	return decodeItemAs[ReplayItem](data)
+}
+
 type ReplayConfiguration struct {
 	Options     []float64   `json:"options"`
 	OptionNames []core.Text `json:"optionNames,omitempty"`

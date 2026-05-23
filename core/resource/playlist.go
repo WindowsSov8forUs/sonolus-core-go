@@ -18,3 +18,7 @@ type PlaylistItem struct {
 	Levels     []LevelItem `json:"levels"`
 	Thumbnail  *core.Srl   `json:"thumbnail,omitempty"`
 }
+
+func DecodePlaylistItem(data []byte) (PlaylistItem, error) {
+	return decodeItemAs[PlaylistItem](data)
+}

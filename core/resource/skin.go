@@ -115,6 +115,10 @@ type SkinItem struct {
 	Texture    core.Srl   `json:"texture"`
 }
 
+func DecodeSkinItem(data []byte) (SkinItem, error) {
+	return decodeItemAs[SkinItem](data)
+}
+
 type SkinData struct {
 	Width         float64          `json:"width"`
 	Height        float64          `json:"height"`

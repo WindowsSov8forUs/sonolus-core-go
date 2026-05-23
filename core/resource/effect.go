@@ -48,3 +48,7 @@ type EffectItem struct {
 	Data       core.Srl   `json:"data"`
 	Audio      core.Srl   `json:"audio"`
 }
+
+func DecodeEffectItem(data []byte) (EffectItem, error) {
+	return decodeItemAs[EffectItem](data)
+}

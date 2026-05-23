@@ -1,6 +1,8 @@
 package server
 
 import (
+	"encoding/json"
+
 	"github.com/WindowsSov8forUs/sonolus-core-go/core"
 	"github.com/WindowsSov8forUs/sonolus-core-go/core/resource"
 )
@@ -52,6 +54,29 @@ type ServerItemSection struct {
 	Items        []any         `json:"items"`
 	Search       *ServerForm   `json:"search,omitempty"`
 	SearchValues string        `json:"searchValues,omitempty"`
+}
+
+func (section *ServerItemSection) UnmarshalJSON(data []byte) error {
+	type serverItemSection ServerItemSection
+	var raw struct {
+		Items []json.RawMessage `json:"items"`
+		*serverItemSection
+	}
+	raw.serverItemSection = (*serverItemSection)(section)
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	items := make([]any, len(raw.Items))
+	for i, rawItem := range raw.Items {
+		item, err := resource.DecodeItem(section.ItemType, rawItem)
+		if err != nil {
+			return err
+		}
+		items[i] = item
+	}
+	section.Items = items
+	return nil
 }
 
 type ServerItemSectionTyped[T any] struct {

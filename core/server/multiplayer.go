@@ -1,8 +1,11 @@
 package server
 
 import (
+	"encoding/json"
+
 	"github.com/WindowsSov8forUs/sonolus-core-go/core"
 	"github.com/WindowsSov8forUs/sonolus-core-go/core/resource"
+	coreerrors "github.com/WindowsSov8forUs/sonolus-core-go/errors"
 )
 
 type ChatMessage interface{ chatMessage() }
@@ -567,3 +570,236 @@ type UpdateUserStatusEvent struct {
 }
 
 func (UpdateUserStatusEvent) event() {}
+
+func DecodeChatMessage(data []byte) (ChatMessage, error) {
+	var header unionTypeHeader
+	if err := json.Unmarshal(data, &header); err != nil {
+		return nil, err
+	}
+
+	switch header.Type {
+	case "quick":
+		var message QuickChatMessage
+		if err := json.Unmarshal(data, &message); err != nil {
+			return nil, err
+		}
+		return message, nil
+	case "text":
+		var message TextChatMessage
+		if err := json.Unmarshal(data, &message); err != nil {
+			return nil, err
+		}
+		return message, nil
+	default:
+		return nil, coreerrors.UnknownUnionTypeError{
+			Union: "ChatMessage",
+			Type:  header.Type,
+		}
+	}
+}
+
+func DecodeCommand(data []byte) (Command, error) {
+	var header unionTypeHeader
+	if err := json.Unmarshal(data, &header); err != nil {
+		return nil, err
+	}
+
+	switch header.Type {
+	case "addChatMessage":
+		return decodeCommandAs[AddChatMessageCommand](data)
+	case "addSuggestion":
+		return decodeCommandAs[AddSuggestionCommand](data)
+	case "clearSuggestions":
+		return decodeCommandAs[ClearSuggestionsCommand](data)
+	case "finishGameplay":
+		return decodeCommandAs[FinishGameplayCommand](data)
+	case "removeSuggestion":
+		return decodeCommandAs[RemoveSuggestionCommand](data)
+	case "removeUser":
+		return decodeCommandAs[RemoveUserCommand](data)
+	case "reportUser":
+		return decodeCommandAs[ReportUserCommand](data)
+	case "resetScoreboard":
+		return decodeCommandAs[ResetScoreboardCommand](data)
+	case "startGameplay":
+		return decodeCommandAs[StartGameplayCommand](data)
+	case "swapSuggestions":
+		return decodeCommandAs[SwapSuggestionsCommand](data)
+	case "updateAutoExit":
+		return decodeCommandAs[UpdateAutoExitCommand](data)
+	case "updateIsSuggestionsLocked":
+		return decodeCommandAs[UpdateIsSuggestionsLockedCommand](data)
+	case "updateLead":
+		return decodeCommandAs[UpdateLeadCommand](data)
+	case "updateLevel":
+		return decodeCommandAs[UpdateLevelCommand](data)
+	case "updateLevelOption":
+		return decodeCommandAs[UpdateLevelOptionCommand](data)
+	case "updateMaster":
+		return decodeCommandAs[UpdateMasterCommand](data)
+	case "updateOptionValues":
+		return decodeCommandAs[UpdateOptionValuesCommand](data)
+	case "updateStatus":
+		return decodeCommandAs[UpdateStatusCommand](data)
+	case "updateUserStatus":
+		return decodeCommandAs[UpdateUserStatusCommand](data)
+	default:
+		return nil, coreerrors.UnknownUnionTypeError{
+			Union: "Command",
+			Type:  header.Type,
+		}
+	}
+}
+
+func decodeCommandAs[T Command](data []byte) (Command, error) {
+	var command T
+	if err := json.Unmarshal(data, &command); err != nil {
+		return nil, err
+	}
+	return command, nil
+}
+
+func DecodeEvent(data []byte) (Event, error) {
+	var header unionTypeHeader
+	if err := json.Unmarshal(data, &header); err != nil {
+		return nil, err
+	}
+
+	switch header.Type {
+	case "addChatMessage":
+		return decodeEventAs[AddChatMessageEvent](data)
+	case "addResult":
+		return decodeEventAs[AddResultEvent](data)
+	case "addSuggestion":
+		return decodeEventAs[AddSuggestionEvent](data)
+	case "addUser":
+		return decodeEventAs[AddUserEvent](data)
+	case "arrangeScoreboardSectionScores":
+		return decodeEventAs[ArrangeScoreboardSectionScoresEvent](data)
+	case "clearSuggestions":
+		return decodeEventAs[ClearSuggestionsEvent](data)
+	case "insertScoreboardSection":
+		return decodeEventAs[InsertScoreboardSectionEvent](data)
+	case "insertScoreboardSectionScore":
+		return decodeEventAs[InsertScoreboardSectionScoreEvent](data)
+	case "mergeScoreboardSectionScores":
+		return decodeEventAs[MergeScoreboardSectionScoresEvent](data)
+	case "moveScoreboardSection":
+		return decodeEventAs[MoveScoreboardSectionEvent](data)
+	case "moveScoreboardSectionScore":
+		return decodeEventAs[MoveScoreboardSectionScoreEvent](data)
+	case "removeScoreboardSection":
+		return decodeEventAs[RemoveScoreboardSectionEvent](data)
+	case "removeScoreboardSectionScore":
+		return decodeEventAs[RemoveScoreboardSectionScoreEvent](data)
+	case "removeSuggestion":
+		return decodeEventAs[RemoveSuggestionEvent](data)
+	case "removeUser":
+		return decodeEventAs[RemoveUserEvent](data)
+	case "startRound":
+		return decodeEventAs[StartRoundEvent](data)
+	case "swapScoreboardSectionScores":
+		return decodeEventAs[SwapScoreboardSectionScoresEvent](data)
+	case "swapScoreboardSections":
+		return decodeEventAs[SwapScoreboardSectionsEvent](data)
+	case "swapSuggestions":
+		return decodeEventAs[SwapSuggestionsEvent](data)
+	case "updateAutoExit":
+		return decodeEventAs[UpdateAutoExitEvent](data)
+	case "update":
+		return decodeEventAs[UpdateEvent](data)
+	case "updateIsSuggestionsLocked":
+		return decodeEventAs[UpdateIsSuggestionsLockedEvent](data)
+	case "updateLead":
+		return decodeEventAs[UpdateLeadEvent](data)
+	case "updateLevel":
+		return decodeEventAs[UpdateLevelEvent](data)
+	case "updateLevelOption":
+		return decodeEventAs[UpdateLevelOptionEvent](data)
+	case "updateLevelOptions":
+		return decodeEventAs[UpdateLevelOptionsEvent](data)
+	case "updateMaster":
+		return decodeEventAs[UpdateMasterEvent](data)
+	case "updateOptions":
+		return decodeEventAs[UpdateOptionsEvent](data)
+	case "updateOptionValues":
+		return decodeEventAs[UpdateOptionValuesEvent](data)
+	case "updateScoreboardDescription":
+		return decodeEventAs[UpdateScoreboardDescriptionEvent](data)
+	case "updateScoreboardSection":
+		return decodeEventAs[UpdateScoreboardSectionEvent](data)
+	case "updateScoreboardSectionIcon":
+		return decodeEventAs[UpdateScoreboardSectionIconEvent](data)
+	case "updateScoreboardSectionScores":
+		return decodeEventAs[UpdateScoreboardSectionScoresEvent](data)
+	case "updateScoreboardSectionScoresValue":
+		return decodeEventAs[UpdateScoreboardSectionScoresValueEvent](data)
+	case "updateScoreboardSections":
+		return decodeEventAs[UpdateScoreboardSectionsEvent](data)
+	case "updateScoreboardSectionTitle":
+		return decodeEventAs[UpdateScoreboardSectionTitleEvent](data)
+	case "updateStatus":
+		return decodeEventAs[UpdateStatusEvent](data)
+	case "updateSuggestions":
+		return decodeEventAs[UpdateSuggestionsEvent](data)
+	case "updateTitle":
+		return decodeEventAs[UpdateTitleEvent](data)
+	case "updateUsers":
+		return decodeEventAs[UpdateUsersEvent](data)
+	case "updateUserStatuses":
+		return decodeEventAs[UpdateUserStatusesEvent](data)
+	case "updateUserStatus":
+		return decodeEventAs[UpdateUserStatusEvent](data)
+	default:
+		return nil, coreerrors.UnknownUnionTypeError{
+			Union: "Event",
+			Type:  header.Type,
+		}
+	}
+}
+
+func decodeEventAs[T Event](data []byte) (Event, error) {
+	var event T
+	if err := json.Unmarshal(data, &event); err != nil {
+		return nil, err
+	}
+	return event, nil
+}
+
+func (command *AddChatMessageCommand) UnmarshalJSON(data []byte) error {
+	type addChatMessageCommand AddChatMessageCommand
+	var raw struct {
+		Message json.RawMessage `json:"message"`
+		*addChatMessageCommand
+	}
+	raw.addChatMessageCommand = (*addChatMessageCommand)(command)
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	message, err := DecodeChatMessage(raw.Message)
+	if err != nil {
+		return err
+	}
+	command.Message = message
+	return nil
+}
+
+func (event *AddChatMessageEvent) UnmarshalJSON(data []byte) error {
+	type addChatMessageEvent AddChatMessageEvent
+	var raw struct {
+		Message json.RawMessage `json:"message"`
+		*addChatMessageEvent
+	}
+	raw.addChatMessageEvent = (*addChatMessageEvent)(event)
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	message, err := DecodeChatMessage(raw.Message)
+	if err != nil {
+		return err
+	}
+	event.Message = message
+	return nil
+}
