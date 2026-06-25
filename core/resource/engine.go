@@ -510,6 +510,8 @@ type EnginePlayData struct {
 type EnginePlayDataArchetype struct {
 	Name             EngineArchetypeName              `json:"name"`
 	HasInput         bool                             `json:"hasInput"`
+	Imports          []EngineDataArchetypeImport      `json:"imports"`
+	Exports          []EngineArchetypeDataName        `json:"exports"`
 	Preprocess       *EnginePlayDataArchetypeCallback `json:"preprocess,omitempty"`
 	SpawnOrder       *EnginePlayDataArchetypeCallback `json:"spawnOrder,omitempty"`
 	ShouldSpawn      *EnginePlayDataArchetypeCallback `json:"shouldSpawn,omitempty"`
@@ -518,8 +520,6 @@ type EnginePlayDataArchetype struct {
 	Touch            *EnginePlayDataArchetypeCallback `json:"touch,omitempty"`
 	UpdateParallel   *EnginePlayDataArchetypeCallback `json:"updateParallel,omitempty"`
 	Terminate        *EnginePlayDataArchetypeCallback `json:"terminate,omitempty"`
-	Imports          []EngineDataArchetypeImport      `json:"imports"`
-	Exports          []EngineArchetypeDataName        `json:"exports"`
 }
 
 type EnginePlayDataArchetypeCallback struct {
@@ -546,6 +546,7 @@ type EngineWatchData struct {
 type EngineWatchDataArchetype struct {
 	Name             EngineArchetypeName               `json:"name"`
 	HasInput         bool                              `json:"hasInput"`
+	Imports          []EngineDataArchetypeImport       `json:"imports"`
 	Preprocess       *EngineWatchDataArchetypeCallback `json:"preprocess,omitempty"`
 	SpawnTime        *EngineWatchDataArchetypeCallback `json:"spawnTime,omitempty"`
 	DespawnTime      *EngineWatchDataArchetypeCallback `json:"despawnTime,omitempty"`
@@ -553,7 +554,6 @@ type EngineWatchDataArchetype struct {
 	UpdateSequential *EngineWatchDataArchetypeCallback `json:"updateSequential,omitempty"`
 	UpdateParallel   *EngineWatchDataArchetypeCallback `json:"updateParallel,omitempty"`
 	Terminate        *EngineWatchDataArchetypeCallback `json:"terminate,omitempty"`
-	Imports          []EngineDataArchetypeImport       `json:"imports"`
 }
 
 type EngineWatchDataArchetypeCallback struct {
@@ -569,9 +569,9 @@ type EnginePreviewData struct {
 
 type EnginePreviewDataArchetype struct {
 	Name       EngineArchetypeName                 `json:"name"`
+	Imports    []EngineDataArchetypeImport         `json:"imports"`
 	Preprocess *EnginePreviewDataArchetypeCallback `json:"preprocess,omitempty"`
 	Render     *EnginePreviewDataArchetypeCallback `json:"render,omitempty"`
-	Imports    []EngineDataArchetypeImport         `json:"imports"`
 }
 
 type EnginePreviewDataArchetypeCallback struct {
