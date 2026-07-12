@@ -7,7 +7,7 @@ type Version struct {
 
 func CurrentVersion() Version {
 	return Version{
-		Package: "0.2.1",
+		Package: "0.2.2",
 		Sonolus: "1.1.1",
 	}
 }
