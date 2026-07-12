@@ -23,6 +23,7 @@ const (
 
 type EngineConfigurationOptionBase struct {
 	Name        core.Text `json:"name"`
+	Title       core.Text `json:"title,omitempty"`
 	Description string    `json:"description,omitempty"`
 	Standard    bool      `json:"standard,omitempty"`
 	Advanced    bool      `json:"advanced,omitempty"`

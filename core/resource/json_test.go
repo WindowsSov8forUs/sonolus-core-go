@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	stderrors "errors"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/WindowsSov8forUs/sonolus-core-go/core"
@@ -74,6 +75,41 @@ func TestEngineConfigurationUnmarshalJSON(t *testing.T) {
 	}
 	if _, ok := configuration.Options[2].(resource.EngineConfigurationSelectOption); !ok {
 		t.Fatalf("Options[2] = %T, want EngineConfigurationSelectOption", configuration.Options[2])
+	}
+}
+
+func TestEngineConfigurationOptionTitleRoundTrip(t *testing.T) {
+	option := resource.EngineConfigurationSliderOption{
+		EngineConfigurationOptionBase: resource.EngineConfigurationOptionBase{
+			Name:  "speed",
+			Title: "Speed",
+		},
+		Type: resource.EngineConfigurationOptionTypeSlider,
+	}
+	data, err := json.Marshal(option)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(data), `"title":"Speed"`) {
+		t.Fatalf("JSON = %s, want title", data)
+	}
+
+	decoded, err := resource.DecodeEngineConfigurationOption(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	decodedOption := decoded.(resource.EngineConfigurationSliderOption)
+	if decodedOption.Title != "Speed" {
+		t.Fatalf("Title = %q, want Speed", decodedOption.Title)
+	}
+
+	option.Title = ""
+	data, err = json.Marshal(option)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(data), `"title"`) {
+		t.Fatalf("JSON = %s, want omitted title", data)
 	}
 }
 
