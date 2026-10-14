@@ -422,7 +422,7 @@ type EngineDataBucket struct {
 
 type EngineDataBucketSprite struct {
 	ID         int     `json:"id"`
-	FallbackID int     `json:"fallbackId,omitempty"`
+	FallbackID *int    `json:"fallbackId,omitempty"`
 	X          float64 `json:"x"`
 	Y          float64 `json:"y"`
 	W          float64 `json:"w"`
@@ -550,7 +550,7 @@ type EngineWatchData struct {
 	Particle    EngineParticleData         `json:"particle"`
 	Buckets     []EngineDataBucket         `json:"buckets"`
 	Archetypes  []EngineWatchDataArchetype `json:"archetypes"`
-	UpdateSpawn int                        `json:"updateSpawn,omitempty"`
+	UpdateSpawn *int                       `json:"updateSpawn,omitempty"`
 	Nodes       []EngineDataNode           `json:"nodes"`
 }
 
@@ -595,9 +595,9 @@ type EngineTutorialData struct {
 	Effect      EngineEffectData      `json:"effect"`
 	Particle    EngineParticleData    `json:"particle"`
 	Instruction EngineInstructionData `json:"instruction"`
-	Preprocess  int                   `json:"preprocess,omitempty"`
-	Navigate    int                   `json:"navigate,omitempty"`
-	Update      int                   `json:"update,omitempty"`
+	Preprocess  *int                  `json:"preprocess,omitempty"`
+	Navigate    *int                  `json:"navigate,omitempty"`
+	Update      *int                  `json:"update,omitempty"`
 	Nodes       []EngineDataNode      `json:"nodes"`
 }
 

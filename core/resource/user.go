@@ -7,7 +7,7 @@ type UserItem struct {
 	Source string     `json:"source,omitempty"`
 	Title  string     `json:"title"`
 	Handle string     `json:"handle,omitempty"`
-	Tags   []core.Tag `json:"tags,omitempty"`
+	Tags   []core.Tag `json:"tags"`
 }
 
 func DecodeUserItem(data []byte) (UserItem, error) {
