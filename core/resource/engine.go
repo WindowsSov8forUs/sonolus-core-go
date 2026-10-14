@@ -23,8 +23,9 @@ const (
 
 type EngineConfigurationOptionBase struct {
 	Name        core.Text `json:"name"`
+	Category    string    `json:"category,omitempty"`
 	Title       core.Text `json:"title,omitempty"`
-	Description string    `json:"description,omitempty"`
+	Description core.Text `json:"description,omitempty"`
 	Standard    bool      `json:"standard,omitempty"`
 	Advanced    bool      `json:"advanced,omitempty"`
 	Scope       string    `json:"scope,omitempty"`
@@ -78,6 +79,7 @@ const (
 	EngineConfigurationMetricAccuracy                EngineConfigurationMetric = "accuracy"
 	EngineConfigurationMetricAccuracyPercentage      EngineConfigurationMetric = "accuracyPercentage"
 	EngineConfigurationMetricLife                    EngineConfigurationMetric = "life"
+	EngineConfigurationMetricTime                    EngineConfigurationMetric = "time"
 	EngineConfigurationMetricPerfect                 EngineConfigurationMetric = "perfect"
 	EngineConfigurationMetricPerfectPercentage       EngineConfigurationMetric = "perfectPercentage"
 	EngineConfigurationMetricGreatGoodMiss           EngineConfigurationMetric = "greatGoodMiss"
@@ -93,7 +95,7 @@ func (m EngineConfigurationMetric) valid() bool {
 		return true
 	case EngineConfigurationMetricAccuracy, EngineConfigurationMetricAccuracyPercentage:
 		return true
-	case EngineConfigurationMetricLife:
+	case EngineConfigurationMetricLife, EngineConfigurationMetricTime:
 		return true
 	case EngineConfigurationMetricPerfect, EngineConfigurationMetricPerfectPercentage:
 		return true
@@ -380,10 +382,18 @@ type EngineConfigurationUI struct {
 	JudgmentErrorMin              float64                                   `json:"judgmentErrorMin"`
 }
 
+// EngineConfigurationOptionCategory groups options in the configuration
+// interface. When OptionCategories is present, every option must set Category.
+type EngineConfigurationOptionCategory struct {
+	Name  string    `json:"name"`
+	Title core.Text `json:"title"`
+}
+
 type EngineConfiguration struct {
-	Options                   []EngineConfigurationOption `json:"options"`
-	UI                        EngineConfigurationUI       `json:"ui"`
-	ReplayFallbackOptionNames []core.Text                 `json:"replayFallbackOptionNames,omitempty"`
+	OptionCategories          []EngineConfigurationOptionCategory `json:"optionCategories,omitempty"`
+	Options                   []EngineConfigurationOption         `json:"options"`
+	UI                        EngineConfigurationUI               `json:"ui"`
+	ReplayFallbackOptionNames []core.Text                         `json:"replayFallbackOptionNames,omitempty"`
 }
 
 const EngineItemVersion = 13

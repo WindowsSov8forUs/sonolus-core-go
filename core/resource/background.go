@@ -74,4 +74,6 @@ type BackgroundData struct {
 	AspectRatio float64 `json:"aspectRatio,omitempty"`
 	Fit         Fit     `json:"fit"`
 	Color       string  `json:"color"`
+	ScaleX      float64 `json:"scaleX,omitempty"`
+	ScaleY      float64 `json:"scaleY,omitempty"`
 }

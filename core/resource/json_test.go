@@ -113,6 +113,28 @@ func TestEngineConfigurationOptionTitleRoundTrip(t *testing.T) {
 	}
 }
 
+func TestEngineConfigurationOptionCategoriesUnmarshalJSON(t *testing.T) {
+	data := []byte(`{
+		"optionCategories":[{"name":"gameplay","title":"#GAMEPLAY"}],
+		"options":[{"name":"#SPEED","category":"gameplay","description":"#SPEED","type":"slider","def":1,"min":0.5,"max":2,"step":0.05}],
+		"ui":{"primaryMetric":"time","secondaryMetric":"life"}
+	}`)
+	var configuration resource.EngineConfiguration
+	if err := json.Unmarshal(data, &configuration); err != nil {
+		t.Fatal(err)
+	}
+	if len(configuration.OptionCategories) != 1 || configuration.OptionCategories[0].Name != "gameplay" || configuration.OptionCategories[0].Title != "#GAMEPLAY" {
+		t.Fatalf("OptionCategories = %#v", configuration.OptionCategories)
+	}
+	option := configuration.Options[0].(resource.EngineConfigurationSliderOption)
+	if option.Category != "gameplay" || option.Description != "#SPEED" {
+		t.Fatalf("option = %#v", option)
+	}
+	if configuration.UI.PrimaryMetric != resource.EngineConfigurationMetricTime {
+		t.Fatalf("PrimaryMetric = %q, want time", configuration.UI.PrimaryMetric)
+	}
+}
+
 func TestEngineDataNodesUnmarshalJSON(t *testing.T) {
 	var data resource.EnginePlayData
 	if err := json.Unmarshal([]byte(`{
