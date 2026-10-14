@@ -10,7 +10,7 @@ type PostItem struct {
 	Name       string     `json:"name"`
 	Source     string     `json:"source,omitempty"`
 	Version    int        `json:"version"`
-	Title      string     `json:"title"`
+	Title      core.Text  `json:"title"`
 	Time       float64    `json:"time"`
 	Author     string     `json:"author"`
 	AuthorUser *UserItem  `json:"authorUser,omitempty"`

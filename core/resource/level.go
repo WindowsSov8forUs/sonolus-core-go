@@ -19,8 +19,8 @@ type LevelItem struct {
 	Source        string                  `json:"source,omitempty"`
 	Version       int                     `json:"version"`
 	Rating        float64                 `json:"rating"`
-	Title         string                  `json:"title"`
-	Artists       string                  `json:"artists"`
+	Title         core.Text               `json:"title"`
+	Artists       core.Text               `json:"artists"`
 	Author        string                  `json:"author"`
 	AuthorUser    *UserItem               `json:"authorUser,omitempty"`
 	Tags          []core.Tag              `json:"tags"`

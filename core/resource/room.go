@@ -6,8 +6,8 @@ import (
 
 type RoomItem struct {
 	Name       string     `json:"name"`
-	Title      string     `json:"title"`
-	Subtitle   string     `json:"subtitle"`
+	Title      core.Text  `json:"title"`
+	Subtitle   core.Text  `json:"subtitle"`
 	Master     string     `json:"master"`
 	MasterUser *UserItem  `json:"masterUser,omitempty"`
 	Tags       []core.Tag `json:"tags"`

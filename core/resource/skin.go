@@ -105,8 +105,8 @@ type SkinItem struct {
 	Name       string     `json:"name"`
 	Source     string     `json:"source,omitempty"`
 	Version    int        `json:"version"`
-	Title      string     `json:"title"`
-	Subtitle   string     `json:"subtitle"`
+	Title      core.Text  `json:"title"`
+	Subtitle   core.Text  `json:"subtitle"`
 	Author     string     `json:"author"`
 	AuthorUser *UserItem  `json:"authorUser,omitempty"`
 	Tags       []core.Tag `json:"tags"`
