@@ -1,5 +1,7 @@
 package core
 
+import "encoding/json"
+
 type GameplayResult struct {
 	Grade         Grade   `json:"grade"`
 	ArcadeScore   float64 `json:"arcadeScore"`
@@ -20,6 +22,28 @@ type Sil struct {
 type Srl struct {
 	Hash *Nilable[string] `json:"hash,omitempty"`
 	URL  *Nilable[string] `json:"url,omitempty"`
+}
+
+// UnmarshalJSON keeps an explicit null (`{"hash":null}`) distinct from an
+// absent key: encoding/json would otherwise set the pointer to nil for null.
+func (s *Srl) UnmarshalJSON(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	*s = Srl{}
+	for key, target := range map[string]**Nilable[string]{"hash": &s.Hash, "url": &s.URL} {
+		value, ok := raw[key]
+		if !ok {
+			continue
+		}
+		var field Nilable[string]
+		if err := json.Unmarshal(value, &field); err != nil {
+			return err
+		}
+		*target = &field
+	}
+	return nil
 }
 
 type Tag struct {

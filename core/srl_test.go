@@ -44,3 +44,20 @@ func TestSrlUnmarshalValue(t *testing.T) {
 		t.Fatalf("hash = %q, %v; want %q, true", value, ok, "abc")
 	}
 }
+
+func TestSrlUnmarshalExplicitNull(t *testing.T) {
+	var srl Srl
+	if err := json.Unmarshal([]byte(`{"hash":null}`), &srl); err != nil {
+		t.Fatal(err)
+	}
+	if srl.Hash == nil || !srl.Hash.IsNil() || srl.URL != nil {
+		t.Fatalf("Srl = %#v, want explicit null hash and absent url", srl)
+	}
+	data, err := json.Marshal(srl)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := string(data), `{"hash":null}`; got != want {
+		t.Fatalf("round trip = %s, want %s", got, want)
+	}
+}
