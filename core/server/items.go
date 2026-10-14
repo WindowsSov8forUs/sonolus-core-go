@@ -20,7 +20,7 @@ type ServerCreateItemResponse struct {
 
 type ServerItemDetails[T any] struct {
 	Item         T                       `json:"item"`
-	Description  string                  `json:"description,omitempty"`
+	Description  core.Text               `json:"description,omitempty"`
 	Actions      []ServerForm            `json:"actions"`
 	HasCommunity bool                    `json:"hasCommunity"`
 	Leaderboards []ServerItemLeaderboard `json:"leaderboards"`
@@ -48,8 +48,8 @@ type ServerItemList[T any] struct {
 type ServerItemSection struct {
 	Title        core.Text     `json:"title"`
 	Icon         core.Icon     `json:"icon,omitempty"`
-	Description  string        `json:"description,omitempty"`
-	Help         string        `json:"help,omitempty"`
+	Description  core.Text     `json:"description,omitempty"`
+	Help         core.Text     `json:"help,omitempty"`
 	ItemType     core.ItemType `json:"itemType"`
 	Items        []any         `json:"items"`
 	Search       *ServerForm   `json:"search,omitempty"`
@@ -82,8 +82,8 @@ func (section *ServerItemSection) UnmarshalJSON(data []byte) error {
 type ServerItemSectionTyped[T any] struct {
 	Title        core.Text     `json:"title"`
 	Icon         core.Icon     `json:"icon,omitempty"`
-	Description  string        `json:"description,omitempty"`
-	Help         string        `json:"help,omitempty"`
+	Description  core.Text     `json:"description,omitempty"`
+	Help         core.Text     `json:"help,omitempty"`
 	ItemType     core.ItemType `json:"itemType"`
 	Items        []T           `json:"items"`
 	Search       *ServerForm   `json:"search,omitempty"`
@@ -132,7 +132,7 @@ type ServerUploadLevelResultResponse struct{}
 type ServerItemLeaderboard struct {
 	Name        string    `json:"name"`
 	Title       core.Text `json:"title"`
-	Description string    `json:"description,omitempty"`
+	Description core.Text `json:"description,omitempty"`
 }
 
 type ServerItemLeaderboardDetails struct {
@@ -162,7 +162,7 @@ type ServerItemCommunityComment struct {
 	Author     string             `json:"author"`
 	AuthorUser *resource.UserItem `json:"authorUser,omitempty"`
 	Time       float64            `json:"time"`
-	Content    string             `json:"content"`
+	Content    core.Text          `json:"content"`
 	Actions    []ServerForm       `json:"actions"`
 }
 

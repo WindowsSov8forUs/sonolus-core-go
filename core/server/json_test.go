@@ -173,3 +173,31 @@ func TestServerItemSectionUnmarshalJSON(t *testing.T) {
 		t.Fatalf("Items[1] = %T, want LevelItem", section.Items[1])
 	}
 }
+
+func TestDecodeTextChatMessageSender(t *testing.T) {
+	user, err := server.DecodeChatMessage([]byte(`{"userId":"u1","type":"text","value":"hi"}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if message, ok := user.(server.UserTextChatMessage); !ok || message.UserID != "u1" || message.Value != "hi" {
+		t.Fatalf("user message = %#v", user)
+	}
+	room, err := server.DecodeChatMessage([]byte(`{"userId":null,"type":"text","value":"#GAMEPLAY"}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	message, ok := room.(server.RoomTextChatMessage)
+	if !ok || message.Value != "#GAMEPLAY" {
+		t.Fatalf("room message = %#v", room)
+	}
+	if _, ok := room.(server.TextChatMessage); !ok {
+		t.Fatal("RoomTextChatMessage does not implement TextChatMessage")
+	}
+	data, err := json.Marshal(message)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := string(data), `{"userId":null,"type":"text","value":"#GAMEPLAY"}`; got != want {
+		t.Fatalf("room message JSON = %s, want %s", got, want)
+	}
+}

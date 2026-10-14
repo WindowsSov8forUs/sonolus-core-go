@@ -24,7 +24,7 @@ type ServerAuthenticateResponse struct {
 }
 
 type ServerMessage struct {
-	Message string `json:"message,omitempty"`
+	Message core.Text `json:"message,omitempty"`
 }
 
 type ServerConfiguration struct {
@@ -35,8 +35,8 @@ type ServerForm struct {
 	Type                string         `json:"type"`
 	Title               core.Text      `json:"title"`
 	Icon                core.Icon      `json:"icon,omitempty"`
-	Description         string         `json:"description,omitempty"`
-	Help                string         `json:"help,omitempty"`
+	Description         core.Text      `json:"description,omitempty"`
+	Help                core.Text      `json:"help,omitempty"`
 	RequireConfirmation bool           `json:"requireConfirmation"`
 	Options             []ServerOption `json:"options"`
 }
@@ -49,7 +49,7 @@ type ServerOption interface {
 type ServerOptionBase struct {
 	Query       string    `json:"query"`
 	Name        core.Text `json:"name"`
-	Description string    `json:"description,omitempty"`
+	Description core.Text `json:"description,omitempty"`
 	Required    bool      `json:"required"`
 }
 
@@ -57,22 +57,22 @@ func (ServerOptionBase) serverOption() {}
 
 type ServerTextOption struct {
 	ServerOptionBase
-	Type        string   `json:"type"`
-	Def         string   `json:"def"`
-	Placeholder string   `json:"placeholder"`
-	Limit       int      `json:"limit"`
-	Shortcuts   []string `json:"shortcuts"`
+	Type        string      `json:"type"`
+	Def         string      `json:"def"`
+	Placeholder core.Text   `json:"placeholder"`
+	Limit       int         `json:"limit"`
+	Shortcuts   []core.Text `json:"shortcuts"`
 }
 
 func (ServerTextOption) OptionType() string { return "text" }
 
 type ServerTextAreaOption struct {
 	ServerOptionBase
-	Type        string   `json:"type"`
-	Def         string   `json:"def"`
-	Placeholder string   `json:"placeholder"`
-	Limit       int      `json:"limit"`
-	Shortcuts   []string `json:"shortcuts"`
+	Type        string      `json:"type"`
+	Def         string      `json:"def"`
+	Placeholder core.Text   `json:"placeholder"`
+	Limit       int         `json:"limit"`
+	Shortcuts   []core.Text `json:"shortcuts"`
 }
 
 func (ServerTextAreaOption) OptionType() string { return "textArea" }
@@ -183,8 +183,8 @@ type ServerFileOptionValidationZip = ServerFileOptionValidation
 type ServerFileOptionValidationJson = ServerFileOptionValidation
 
 type ServerInfo struct {
-	Title         string              `json:"title"`
-	Description   string              `json:"description,omitempty"`
+	Title         core.Text           `json:"title"`
+	Description   core.Text           `json:"description,omitempty"`
 	Buttons       []ServerInfoButton  `json:"buttons"`
 	Configuration ServerConfiguration `json:"configuration"`
 	Banner        *core.Srl           `json:"banner,omitempty"`

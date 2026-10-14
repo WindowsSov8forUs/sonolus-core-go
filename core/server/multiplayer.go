@@ -18,13 +18,38 @@ type QuickChatMessage struct {
 
 func (QuickChatMessage) chatMessage() {}
 
-type TextChatMessage struct {
-	UserID *ServiceUserId `json:"userId"`
-	Type   string         `json:"type"`
-	Value  string         `json:"value"`
+// TextChatMessage is a text message from a user (UserTextChatMessage) or
+// from the room itself (RoomTextChatMessage, userId null, Text value).
+type TextChatMessage interface {
+	ChatMessage
+	textChatMessage()
 }
 
-func (TextChatMessage) chatMessage() {}
+type UserTextChatMessage struct {
+	UserID ServiceUserId `json:"userId"`
+	Type   string        `json:"type"`
+	Value  string        `json:"value"`
+}
+
+func (UserTextChatMessage) chatMessage()     {}
+func (UserTextChatMessage) textChatMessage() {}
+
+type RoomTextChatMessage struct {
+	Type  string    `json:"type"`
+	Value core.Text `json:"value"`
+}
+
+func (RoomTextChatMessage) chatMessage()     {}
+func (RoomTextChatMessage) textChatMessage() {}
+
+// MarshalJSON writes the room sender as "userId": null.
+func (m RoomTextChatMessage) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		UserID *ServiceUserId `json:"userId"`
+		Type   string         `json:"type"`
+		Value  core.Text      `json:"value"`
+	}{nil, m.Type, m.Value})
+}
 
 type ServerCreateRoomRequest struct{}
 
@@ -398,7 +423,7 @@ type UpdateEvent struct {
 	Type                  string              `json:"type"`
 	AllowOtherServers     bool                `json:"allowOtherServers"`
 	ReportUserOptions     []ServerForm        `json:"reportUserOptions"`
-	Title                 string              `json:"title"`
+	Title                 core.Text           `json:"title"`
 	Status                RoomStatus          `json:"status"`
 	Master                *ServiceUserId      `json:"master"`
 	Lead                  *ServiceUserId      `json:"lead"`
@@ -409,7 +434,7 @@ type UpdateEvent struct {
 	AutoExit              core.AutoExit       `json:"autoExit"`
 	IsSuggestionsLocked   bool                `json:"isSuggestionsLocked"`
 	Suggestions           []Suggestion        `json:"suggestions"`
-	ScoreboardDescription string              `json:"scoreboardDescription,omitempty"`
+	ScoreboardDescription core.Text           `json:"scoreboardDescription,omitempty"`
 	ScoreboardSections    []ScoreboardSection `json:"scoreboardSections"`
 	Results               []ResultEntry       `json:"results"`
 	Users                 []RoomUser          `json:"users"`
@@ -476,8 +501,8 @@ type UpdateOptionValuesEvent struct {
 func (UpdateOptionValuesEvent) event() {}
 
 type UpdateScoreboardDescriptionEvent struct {
-	Type                  string `json:"type"`
-	ScoreboardDescription string `json:"scoreboardDescription,omitempty"`
+	Type                  string    `json:"type"`
+	ScoreboardDescription core.Text `json:"scoreboardDescription,omitempty"`
 }
 
 func (UpdateScoreboardDescriptionEvent) event() {}
@@ -544,8 +569,8 @@ type UpdateSuggestionsEvent struct {
 func (UpdateSuggestionsEvent) event() {}
 
 type UpdateTitleEvent struct {
-	Type  string `json:"type"`
-	Title string `json:"title"`
+	Type  string    `json:"type"`
+	Title core.Text `json:"title"`
 }
 
 func (UpdateTitleEvent) event() {}
@@ -585,7 +610,20 @@ func DecodeChatMessage(data []byte) (ChatMessage, error) {
 		}
 		return message, nil
 	case "text":
-		var message TextChatMessage
+		var sender struct {
+			UserID *ServiceUserId `json:"userId"`
+		}
+		if err := json.Unmarshal(data, &sender); err != nil {
+			return nil, err
+		}
+		if sender.UserID == nil {
+			var message RoomTextChatMessage
+			if err := json.Unmarshal(data, &message); err != nil {
+				return nil, err
+			}
+			return message, nil
+		}
+		var message UserTextChatMessage
 		if err := json.Unmarshal(data, &message); err != nil {
 			return nil, err
 		}
