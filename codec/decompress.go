@@ -17,7 +17,13 @@ func Decompress[T any](data []byte) (T, error) {
 	}
 	defer reader.Close()
 
-	if err := json.NewDecoder(reader).Decode(&value); err != nil {
+	// Read to EOF so the gzip/zlib checksum is verified, and reject trailing
+	// data after the JSON value, as JSON.parse does.
+	payload, err := io.ReadAll(reader)
+	if err != nil {
+		return value, err
+	}
+	if err := json.Unmarshal(payload, &value); err != nil {
 		return value, err
 	}
 	return value, nil
