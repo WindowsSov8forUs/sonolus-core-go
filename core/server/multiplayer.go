@@ -18,6 +18,15 @@ type QuickChatMessage struct {
 
 func (QuickChatMessage) chatMessage() {}
 
+// QuickChatMessage values.
+const (
+	QuickChatMessageHello = "hello"
+	QuickChatMessageGLHF  = "glhf"
+	QuickChatMessageGG    = "gg"
+	QuickChatMessageNS    = "ns"
+	QuickChatMessageTY    = "ty"
+)
+
 // TextChatMessage is a text message from a user (UserTextChatMessage) or
 // from the room itself (RoomTextChatMessage, userId null, Text value).
 type TextChatMessage interface {

@@ -182,6 +182,47 @@ type ServerFileOptionValidationZip = ServerFileOptionValidation
 
 type ServerFileOptionValidationJson = ServerFileOptionValidation
 
+// Validation types of a ServerFileOption (TS union members); the comment names
+// the field set allowed for each type.
+const (
+	ServerFileOptionValidationTypeFile                    = "file"                    // File
+	ServerFileOptionValidationTypeImage                   = "image"                   // Image
+	ServerFileOptionValidationTypeAudio                   = "audio"                   // Audio
+	ServerFileOptionValidationTypeZip                     = "zip"                     // Zip
+	ServerFileOptionValidationTypeServerBanner            = "serverBanner"            // Image
+	ServerFileOptionValidationTypePostThumbnail           = "postThumbnail"           // Image
+	ServerFileOptionValidationTypePlaylistThumbnail       = "playlistThumbnail"       // Image
+	ServerFileOptionValidationTypeLevelCover              = "levelCover"              // Image
+	ServerFileOptionValidationTypeLevelBgm                = "levelBgm"                // Audio
+	ServerFileOptionValidationTypeLevelPreview            = "levelPreview"            // Audio
+	ServerFileOptionValidationTypeLevelData               = "levelData"               // Json
+	ServerFileOptionValidationTypeSkinThumbnail           = "skinThumbnail"           // Image
+	ServerFileOptionValidationTypeSkinData                = "skinData"                // Json
+	ServerFileOptionValidationTypeSkinTexture             = "skinTexture"             // Image
+	ServerFileOptionValidationTypeBackgroundThumbnail     = "backgroundThumbnail"     // Image
+	ServerFileOptionValidationTypeBackgroundImage         = "backgroundImage"         // Image
+	ServerFileOptionValidationTypeBackgroundData          = "backgroundData"          // Json
+	ServerFileOptionValidationTypeBackgroundConfiguration = "backgroundConfiguration" // Json
+	ServerFileOptionValidationTypeEffectThumbnail         = "effectThumbnail"         // Image
+	ServerFileOptionValidationTypeEffectData              = "effectData"              // Json
+	ServerFileOptionValidationTypeEffectAudio             = "effectAudio"             // Zip
+	ServerFileOptionValidationTypeParticleThumbnail       = "particleThumbnail"       // Image
+	ServerFileOptionValidationTypeParticleData            = "particleData"            // Json
+	ServerFileOptionValidationTypeParticleTexture         = "particleTexture"         // Image
+	ServerFileOptionValidationTypeEngineThumbnail         = "engineThumbnail"         // Image
+	ServerFileOptionValidationTypeEnginePlayData          = "enginePlayData"          // Json
+	ServerFileOptionValidationTypeEngineWatchData         = "engineWatchData"         // Json
+	ServerFileOptionValidationTypeEnginePreviewData       = "enginePreviewData"       // Json
+	ServerFileOptionValidationTypeEngineTutorialData      = "engineTutorialData"      // Json
+	ServerFileOptionValidationTypeEngineRom               = "engineRom"               // File
+	ServerFileOptionValidationTypeEngineConfiguration     = "engineConfiguration"     // Json
+	ServerFileOptionValidationTypeReplayData              = "replayData"              // Json
+	ServerFileOptionValidationTypeReplayConfiguration     = "replayConfiguration"     // Json
+	ServerFileOptionValidationTypeRoomCover               = "roomCover"               // Image
+	ServerFileOptionValidationTypeRoomBgm                 = "roomBgm"                 // Audio
+	ServerFileOptionValidationTypeRoomPreview             = "roomPreview"             // Audio
+)
+
 type ServerInfo struct {
 	Title         core.Text           `json:"title"`
 	Description   core.Text           `json:"description,omitempty"`
