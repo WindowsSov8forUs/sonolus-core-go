@@ -3,6 +3,50 @@ package core
 type Text string
 
 const (
+	// "- "
+	TextPrefixList Text = "#PREFIX_LIST"
+	// "> "
+	TextPrefixQuote Text = "#PREFIX_QUOTE"
+	// " "
+	TextSeparatorSpace Text = "#SEPARATOR_SPACE"
+	// ", "
+	TextSeparatorComma Text = "#SEPARATOR_COMMA"
+	// ": "
+	TextSeparatorColon Text = "#SEPARATOR_COLON"
+	// " & "
+	TextSeparatorAnd Text = "#SEPARATOR_AND"
+	// " + "
+	TextSeparatorPlus Text = "#SEPARATOR_PLUS"
+	// " / "
+	TextSeparatorSlash Text = "#SEPARATOR_SLASH"
+	// " < "
+	TextSeparatorLesser Text = "#SEPARATOR_LESSER"
+	// " > "
+	TextSeparatorGreater Text = "#SEPARATOR_GREATER"
+	// '
+	TextSeparatorQuoteSingleLeft Text = "#SEPARATOR_QUOTE_SINGLE_LEFT"
+	// '
+	TextSeparatorQuoteSingleRight Text = "#SEPARATOR_QUOTE_SINGLE_RIGHT"
+	// "
+	TextSeparatorQuoteDoubleLeft Text = "#SEPARATOR_QUOTE_DOUBLE_LEFT"
+	// "
+	TextSeparatorQuoteDoubleRight Text = "#SEPARATOR_QUOTE_DOUBLE_RIGHT"
+	// (
+	TextSeparatorParenthesisLeft Text = "#SEPARATOR_PARENTHESIS_LEFT"
+	// )
+	TextSeparatorParenthesisRight Text = "#SEPARATOR_PARENTHESIS_RIGHT"
+	// [
+	TextSeparatorBracketLeft Text = "#SEPARATOR_BRACKET_LEFT"
+	// ]
+	TextSeparatorBracketRight Text = "#SEPARATOR_BRACKET_RIGHT"
+	// '{0}'
+	TextSurroundQuotesSingle Text = "#SURROUND_QUOTES_SINGLE"
+	// "{0}"
+	TextSurroundQuotesDouble Text = "#SURROUND_QUOTES_DOUBLE"
+	// ({0})
+	TextSurroundParentheses Text = "#SURROUND_PARENTHESES"
+	// [{0}]
+	TextSurroundBrackets Text = "#SURROUND_BRACKETS"
 	// Custom Server
 	TextCustomServer Text = "#CUSTOM_SERVER"
 	// Collection
@@ -21,6 +65,8 @@ const (
 	TextInquiry Text = "#INQUIRY"
 	// Banner
 	TextBanner Text = "#BANNER"
+	// Icon
+	TextIcon Text = "#ICON"
 	// Post
 	TextPost Text = "#POST"
 	// Playlist
@@ -129,6 +175,10 @@ const (
 	TextFilter Text = "#FILTER"
 	// Sort
 	TextSort Text = "#SORT"
+	// Sort By
+	TextSortBy Text = "#SORT_BY"
+	// Sort Order
+	TextSortOrder Text = "#SORT_ORDER"
 	// Keywords
 	TextKeywords Text = "#KEYWORDS"
 	// Name
@@ -155,6 +205,12 @@ const (
 	TextCoauthor Text = "#COAUTHOR"
 	// Collaborator
 	TextCollaborator Text = "#COLLABORATOR"
+	// Lyricist
+	TextLyricist Text = "#LYRICIST"
+	// Composer
+	TextComposer Text = "#COMPOSER"
+	// Arranger
+	TextArranger Text = "#ARRANGER"
 	// Description
 	TextDescription Text = "#DESCRIPTION"
 	// Genre
@@ -201,6 +257,14 @@ const (
 	TextRole Text = "#ROLE"
 	// Permission
 	TextPermission Text = "#PERMISSION"
+	// Graphics
+	TextGraphics Text = "#GRAPHICS"
+	// Audio
+	TextAudio Text = "#AUDIO"
+	// Gameplay
+	TextGameplay Text = "#GAMEPLAY"
+	// Miscellaneous
+	TextMiscellaneous Text = "#MISCELLANEOUS"
 	// Level Speed
 	TextSpeed Text = "#SPEED"
 	// Mirror Level
@@ -233,6 +297,8 @@ const (
 	TextStageAnimation Text = "#STAGE_ANIMATION"
 	// Stage Tilt
 	TextStageTilt Text = "#STAGE_TILT"
+	// Stage Cover
+	TextStageCover Text = "#STAGE_COVER"
 	// Vertical Stage Cover
 	TextStageCoverVertical Text = "#STAGE_COVER_VERTICAL"
 	// Horizontal Stage Cover
@@ -515,6 +581,10 @@ const (
 	TextForward Text = "#FORWARD"
 	// Backward
 	TextBackward Text = "#BACKWARD"
+	// Ascending
+	TextAscending Text = "#ASCENDING"
+	// Descending
+	TextDescending Text = "#DESCENDING"
 	// Default
 	TextDefault Text = "#DEFAULT"
 	// Neutral
@@ -551,6 +621,8 @@ const (
 	TextSpecial Text = "#SPECIAL"
 	// Append
 	TextAppend Text = "#APPEND"
+	// Enter icon...
+	TextIconPlaceholder Text = "#ICON_PLACEHOLDER"
 	// Enter post...
 	TextPostPlaceholder Text = "#POST_PLACEHOLDER"
 	// Enter playlist...
@@ -777,6 +849,8 @@ const (
 	TextPublic Text = "#PUBLIC"
 	// Private
 	TextPrivate Text = "#PRIVATE"
+	// Favorite
+	TextFavorite Text = "#FAVORITE"
 	// Pop
 	TextPop Text = "#POP"
 	// Rock
@@ -827,6 +901,8 @@ const (
 	TextCrossHand Text = "#CROSS_HAND"
 	// Gimmick
 	TextGimmick Text = "#GIMMICK"
+	// Epilepsy
+	TextEpilepsy Text = "#EPILEPSY"
 	// Collaboration
 	TextCollaboration Text = "#COLLABORATION"
 	// Report
@@ -1119,4 +1195,15 @@ const (
 	TextStar Text = "#STAR"
 	// Starred
 	TextStarred Text = "#STARRED"
+)
+
+// TextFunction is the set of text function prefixes (sonolus-core
+// text/function.ts, Sonolus 1.1.2+).
+type TextFunction string
+
+const (
+	TextFunctionEscape       TextFunction = "##"
+	TextFunctionTimeFull     TextFunction = "##TIME_FULL"
+	TextFunctionTimeRelative TextFunction = "##TIME_RELATIVE"
+	TextFunctionLocalize     TextFunction = "##LOCALIZE"
 )
