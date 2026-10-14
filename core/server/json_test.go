@@ -201,3 +201,14 @@ func TestDecodeTextChatMessageSender(t *testing.T) {
 		t.Fatalf("room message JSON = %s, want %s", got, want)
 	}
 }
+
+func TestDecodeMergeScoreboardSectionScoresEvent(t *testing.T) {
+	event, err := server.DecodeEvent([]byte(`{"type":"mergeScoreboardSectionScores","index":2,"scores":[{"userId":"u1","value":"100"}]}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	merge, ok := event.(server.MergeScoreboardSectionScoresEvent)
+	if !ok || merge.Index != 2 || len(merge.Scores) != 1 || merge.Scores[0].Value != "100" {
+		t.Fatalf("event = %#v", event)
+	}
+}

@@ -326,9 +326,9 @@ type InsertScoreboardSectionScoreEvent struct {
 func (InsertScoreboardSectionScoreEvent) event() {}
 
 type MergeScoreboardSectionScoresEvent struct {
-	Type         string `json:"type"`
-	SectionIndex int    `json:"sectionIndex"`
-	Indexes      []int  `json:"indexes"`
+	Type   string       `json:"type"`
+	Index  int          `json:"index"`
+	Scores []ScoreEntry `json:"scores"`
 }
 
 func (MergeScoreboardSectionScoresEvent) event() {}
